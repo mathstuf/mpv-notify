@@ -242,7 +242,6 @@ function notify_current_track()
 	body = ""
 	params = ""
 	scaled_image = ""
-	delete_scaled_image = false
 
 	-- first try finding local cover art
 	abs_filename = os.getenv("PWD") .. "/" .. mp.get_property_native("path")
@@ -250,7 +249,6 @@ function notify_current_track()
 	if cover_image and cover_image ~= "" then
 		scaled_image = tmpname()
 		scale_image(cover_image, scaled_image)
-		delete_scaled_image = true
 	end
 
 	-- then load cover art from the internet
@@ -284,10 +282,6 @@ function notify_current_track()
 	command = ("notify-send -a mpv %s -- %s %s"):format(params, summary, body)
 	print_debug("command: " .. command)
 	os.execute(command)
-
-	if delete_scaled_image and not os.remove(scaled_image) then
-		print("could not remove" .. scaled_image .. ", please remove it manually")
-	end
 end
 
 function notify_metadata_updated(name, data)
